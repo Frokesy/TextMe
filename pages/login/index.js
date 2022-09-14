@@ -1,9 +1,15 @@
 import Link from 'next/link'
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const Login = () => {
   return (
-        <>
+    <motion.div 
+    className="w-[85vw] mx-auto pt-[3vh]"
+    initial={{ opacity: 0, scale: 1.5 }}
+    animate={{ opacity: 1, scale: [1.5 , 0.75, 1] }}
+    transition={{ duration: 1.5 }}
+    >
             <h2 className="text-[#0fa84e] font-[Combo] font-semibold text-[28px]">TextMe</h2>
             <div className="text-[#ccc] mt-[10vh]">
                 <h2 className="text-[24px]">Login</h2>
@@ -36,9 +42,9 @@ const Login = () => {
                         </div>
                     </form>
                     <div className="flex justify-end pt-10 items-center">
-                        <span className="text-gray-500 text-[10px]">Don&apos;t have an account?</span>
+                        <span className="text-gray-500 text-[12px]">Don&apos;t have an account?</span>
                         <Link href="#" passHref>
-                            <span className="text-[#0fa84e] mx-2 text-[10px]">
+                            <span className="text-[#0fa84e] mx-2 text-[12px]">
                                 Let&apos;s get started
                             </span>
                         </Link>
@@ -46,11 +52,11 @@ const Login = () => {
                 </div>
             </div>
 
-            <div className="mt-[20vh] italic flex flex-col space-y-2 text-center text-gray-500">
+            <div className="mt-[15vh] text-[10px] italic flex flex-col space-y-2 text-center text-gray-500">
                 <span>V 1.0.0</span>
                 <span className="">Designed by Frokes</span>
             </div>
-        </>
+        </motion.div>
   )
 }
 

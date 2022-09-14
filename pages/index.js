@@ -12,16 +12,9 @@ const Home = () => {
     }, 5000);
   }, [])
   return (
-    <div className="relative">
+    <div className="">
       {visible ? (
-         <motion.div 
-         className="absolute left-6 w-[85vw] pt-[3vh]"
-         initial={{ opacity: 0, scale: 1.5 }}
-         animate={{ opacity: 1, scale: 1 }}
-         transition={{ duration: 1 }}
-         >
          <Login />
-       </motion.div>
       ) : (
         <motion.div
         animate={{
