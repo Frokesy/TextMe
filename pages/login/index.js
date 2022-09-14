@@ -37,7 +37,7 @@ const Login = () => {
                             />
                         </div>
                         <div className="flex justify-between mt-8">
-                            <a href="#" className="text-[#ccc]">Forgot Password?</a>
+                            <a href="#" className="text-[#ccc] text-[12px]">Forgot Password?</a>
                             <button className="bg-[#0fa84e] text-white font-semibold py-2 px-14 rounded-md">Login</button>
                         </div>
                     </form>
