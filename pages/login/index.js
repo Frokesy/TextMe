@@ -4,8 +4,8 @@ import React from 'react'
 const Login = () => {
   return (
         <>
-            <h2 className="pt-[3vh] text-[#0fa84e] font-[Combo] font-semibold text-[28px]">TextMe</h2>
-            <div className="text-[#ccc] mt-[10vh] w-[85vw]">
+            <h2 className="text-[#0fa84e] font-[Combo] font-semibold text-[28px]">TextMe</h2>
+            <div className="text-[#ccc] mt-[10vh]">
                 <h2 className="text-[24px]">Login</h2>
                 <span className="text-gray-500 italic">Hello Champ! Please proceed to login.</span>
                 <div className="flex flex-col">

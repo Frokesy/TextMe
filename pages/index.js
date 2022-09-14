@@ -15,7 +15,7 @@ const Home = () => {
     <div className="relative">
       {visible ? (
          <motion.div 
-         className="absolute left-6"
+         className="absolute left-6 w-[85vw] pt-[3vh]"
          initial={{ opacity: 0, scale: 1.5 }}
          animate={{ opacity: 1, scale: 1 }}
          transition={{ duration: 1 }}
