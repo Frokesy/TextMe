@@ -11,7 +11,7 @@ const Login = () => {
     transition={{ duration: 1.5 }}
     >
             <h2 className="text-[#0fa84e] font-[Combo] font-semibold text-[28px]">TextMe</h2>
-            <div className="text-[#ccc] mt-[10vh]">
+            <div className="text-[#ccc] mt-[5vh]">
                 <h2 className="text-[24px]">Login</h2>
                 <span className="text-gray-500 italic">Hello Champ! Please proceed to login.</span>
                 <div className="flex flex-col">
