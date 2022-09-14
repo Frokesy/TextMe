@@ -11,7 +11,7 @@ const Login = () => {
     transition={{ duration: 1.5 }}
     >
             <h2 className="text-[#0fa84e] font-[Combo] font-semibold text-[28px]">TextMe</h2>
-            <div className="text-[#ccc] mt-[5vh]">
+            <div className="text-[#ccc] mt-[6vh]">
                 <h2 className="text-[24px]">Login</h2>
                 <span className="text-gray-500 italic">Hello Champ! Please proceed to login.</span>
                 <div className="flex flex-col">
@@ -36,7 +36,7 @@ const Login = () => {
                                 className="border-gray-500 border-2 rounded-md p-3 focus:border focus:border-[#ccc] outline-none outline-offset-2" 
                             />
                         </div>
-                        <div className="flex justify-between mt-8">
+                        <div className="flex items-center justify-between mt-8">
                             <a href="#" className="text-[#ccc] text-[12px]">Forgot Password?</a>
                             <button className="bg-[#0fa84e] text-white font-semibold py-2 px-14 rounded-md">Login</button>
                         </div>
