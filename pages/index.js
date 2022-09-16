@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '../components/Loader'
+import Meta from '../defaults/Meta'
 import Login from './login'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useRouter } from 'next/router'
+
 
 const Home = () => {
-  const [visible, setVisible] = useState(false)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
-      setVisible(true)
-    }, 5000);
+      setLoading(false)
+    }, 4000);
   }, [])
   return (
     <div className="">
-      {visible ? (
-         <Login />
-      ) : (
-        <Loader />
-      )}
+      <Meta />
+      {loading ? <Loader /> : <Login />}
     </div>
   )
 }

@@ -3,7 +3,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from "next/router";
-import Loader from '../../components/Loader'
+import { Spinner } from '@chakra-ui/react'
 
 const Signup = () => {
     const router = useRouter();
@@ -106,15 +106,12 @@ const Signup = () => {
     }
   return (
     <div>
-        {loading ? (
-        <Loader />
-        ) :
-        (
-    <motion.div 
-    className="w-[85vw] mx-auto pt-[3vh]"
-    initial={{ opacity: 0, scale: 1.5 }}
-    animate={{ opacity: 1, scale: [1.5 , 0.75, 1] }}
-    transition={{ duration: 1.5 }}
+    {loading && <div className=" h-screen w-screen opacity-75 absolute flex items-center justify-center"><Spinner color="#0fa84e" size="lg" thickness="3px" /></div>}
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.5 }}
+        className="w-[85vw] mx-auto pt-[3vh]"
     >
             <h2 className="text-[#0fa84e] font-[Combo] font-semibold text-[28px]">TextMe</h2>
             <div className="text-[#ccc] mt-[6vh]">
@@ -199,7 +196,6 @@ const Signup = () => {
                 <span className="">Designed by Frokes</span>
             </div>
         </motion.div>
-        )}
     </div>
   )
 }
