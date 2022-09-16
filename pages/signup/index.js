@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { supabase } from '../../utils/supabaseClient'
 import { useToast } from '@chakra-ui/react'
 import { useRouter } from "next/router";
+import Loader from '../../components/Loader'
 
 const Signup = () => {
     const toast = useToast()
@@ -14,23 +15,44 @@ const Signup = () => {
         email: '',
         password: '',
     })
+    const [loading, setLoading] = useState(false)
 
     const handleSignUp = async (e) => {
         e.preventDefault()
+        setLoading(true)
+
+
+        if (!userProfile.name || !userProfile.username || !userProfile.email || !userProfile.password) {
+            toast({
+                title: "Error",
+                description: "Please fill all the fields",
+                status: "error",
+                duration: 5000,
+                position: "top-center",
+                isClosable: true,
+            })
+            setLoading(false)
+            return
+        }
+
+
         try {
             const { user, error } = await supabase.auth.signUp({
                 email: userProfile.email,
                 password: userProfile.password
             })
-            error && toast({
-                title: "Oops, an error has occured.",
-                description: error?.message,
-                status: "error",
-                backgroundColor: "#e74c3c",
-                duration: 3000,
-                isClosable: true,
-                position: "top-center",
-              })
+            if (error) {
+                setLoading(false)
+                toast({
+                    title: "Oops, an error has occured.",
+                    description: error?.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top-center",
+                  })
+                return
+            }
             const id = user?.id
 
             const { data, error: authError } = await supabase.from("profiles").insert([
@@ -41,28 +63,32 @@ const Signup = () => {
                     email: userProfile.email,
                 }
             ])
-            authError && toast({
-                title: "Oops, an error has occured.",
-                description: authError?.message,
-                status: "error",
-                backgroundColor: "#e74c3c",
-                duration: 3000,
-                isClosable: true,
-                position: "top-center",
-              })
-
-            data && toast({
-                title: "Welcome Aboard Champ!",
-                description: "Your account has been successfully created. You'll be redirected shortly",
-                status: "success",
-                backgroundColor: "#0fa84e",
-                duration: 3000,
-                isClosable: true,
-                position: "top-center",
-              })
-            data && setTimeout(() => {
-                router.push("/profile")
-            }, 5000)
+            authError ? (
+                toast({
+                    title: "Oops, an error has occured.",
+                    description: authError?.message,
+                    status: "error",
+                    backgroundColor: "#e74c3c",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top-center",
+                  }),
+                setLoading(false)
+            ) : (
+                toast({
+                    title: "Welcome Aboard Champ!",
+                    description: "Your account has been successfully created. You'll be redirected shortly",
+                    status: "success",
+                    backgroundColor: "#0fa84e",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top-center",
+                  }),
+                setTimeout(() => {
+                    router.push("/profile")
+                }, 5000),
+                setLoading(false)
+            ) 
         } catch (error) {
             toast({
                 title: "Oops, an error has occured.",
@@ -77,6 +103,8 @@ const Signup = () => {
         }
     }
   return (
+    <div>
+        {loading && <Loader />}
     <motion.div 
     className="w-[85vw] mx-auto pt-[3vh]"
     initial={{ opacity: 0, scale: 1.5 }}
@@ -157,6 +185,7 @@ const Signup = () => {
                 <span className="">Designed by Frokes</span>
             </div>
         </motion.div>
+    </div>
   )
 }
 
