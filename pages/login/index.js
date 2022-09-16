@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Spinner } from '@chakra-ui/react'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
+import Meta from '../../defaults/Meta'
 
 const Login = () => {
     const router = useRouter();
@@ -79,6 +80,7 @@ const Login = () => {
     }
   return (
     <div>
+    <Meta title="Sign In" />
     {loading && <div className=" h-screen w-screen opacity-75 absolute flex items-center justify-center"><Spinner color="#0fa84e" size="lg" thickness="3px" /></div>}
     <motion.div
         initial={{ opacity: 0 }}
