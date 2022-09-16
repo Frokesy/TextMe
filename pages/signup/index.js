@@ -1,22 +1,20 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import React from 'react'
+import { motion } from 'framer-motion'
 import { supabase } from '../../utils/supabaseClient'
-import { useToast } from '@chakra-ui/react'
 import { useRouter } from "next/router";
 import Loader from '../../components/Loader'
 
 const Signup = () => {
-    const toast = useToast()
     const router = useRouter();
-    const [userProfile, setUserProfile] = useState({
+    const [userProfile, setUserProfile] = React.useState({
         name: '',
         username: '',
         email: '',
         password: '',
     })
-    const [loading, setLoading] = useState(false)
-    const [message, setMessage] = useState({
+    const [loading, setLoading] = React.useState(false)
+    const [message, setMessage] = React.useState({
         error: '',
         success: '',
     })
@@ -28,7 +26,7 @@ const Signup = () => {
 
         if (!userProfile.name || !userProfile.username || !userProfile.email || !userProfile.password) {
             setMessage({
-                error: 'Please fill all the fields',
+                error: 'All fields are required',
                 success: '',
             })
             setTimeout(() => {
@@ -36,7 +34,7 @@ const Signup = () => {
                     error: '',
                     success: '',
                 })
-            }, 3000)
+            }, 4000)
             setLoading(false)
             return
         }
@@ -58,7 +56,7 @@ const Signup = () => {
                         error: '',
                         success: '',
                     })
-                }, 3000)
+                }, 4000)
                 return
             }
             const id = user?.id
@@ -82,11 +80,11 @@ const Signup = () => {
                         error: '',
                         success: '',
                     })
-                }, 3000)
+                }, 4000)
             ) : (
                 setMessage({
                     error: "",
-                    success: "Account created successfully, you'll be redirected shortly",
+                    success: "Account created, you'll be redirected shortly",
                 }),
                 setTimeout(() => {
                     router.push("/profile")
@@ -94,7 +92,7 @@ const Signup = () => {
                         error: '',
                         success: '',
                     })
-                }, 3000),
+                }, 4000),
                 setLoading(false)
             ) 
         } catch (error) {
@@ -102,13 +100,15 @@ const Signup = () => {
             setError(error?.message)
             setTimeout(() => {
                 setError(null)
-            }, 3000)
+            }, 4000)
             console.log(error)
         }
     }
   return (
     <div>
-        {loading ? (<Loader />) :
+        {loading ? (
+        <Loader />
+        ) :
         (
     <motion.div 
     className="w-[85vw] mx-auto pt-[3vh]"
@@ -125,7 +125,7 @@ const Signup = () => {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1}} 
-                className={`${ message.error && 'bg-red-500' } ${ message.success && 'bg-[#0fa84e]' }  ${ message.error && 'text-red-200' } ${ message.success && 'text-[#fff]' } p-3 text-[10px] font-semibold mt-4 rounded-md text-center`}>
+                className={`${ message.error && 'bg-red-700' } ${ message.success && 'bg-[#0fa84e]' }  ${ message.error && 'text-red-100' } ${ message.success && 'text-[#fff]' } p-3 text-[10px] font-semibold mt-4 rounded-md text-center`}>
                     { message.error ? message.error : message.success }
                 </motion.p>
                 }
