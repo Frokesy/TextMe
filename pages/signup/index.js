@@ -108,7 +108,8 @@ const Signup = () => {
     }
   return (
     <div>
-        {loading && <Loader />}
+        {loading ? (<Loader />) :
+        (
     <motion.div 
     className="w-[85vw] mx-auto pt-[3vh]"
     initial={{ opacity: 0, scale: 1.5 }}
@@ -198,6 +199,7 @@ const Signup = () => {
                 <span className="">Designed by Frokes</span>
             </div>
         </motion.div>
+        )}
     </div>
   )
 }
