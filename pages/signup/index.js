@@ -103,7 +103,7 @@ const Signup = () => {
         }
     }
   return (
-    <div>
+    <div className="bg-[#121413] h-screen">
         {loading && <Loader />}
     <motion.div 
     className="w-[85vw] mx-auto pt-[3vh]"
