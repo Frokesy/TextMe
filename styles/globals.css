@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 * {
+    background: #121413;
     font-family: 'Josefin Sans', sans-serif;
 }
 
