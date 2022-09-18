@@ -3,11 +3,11 @@ import { FaEdit } from 'react-icons/fa'
 import { IoArrowBack, IoPower } from "react-icons/io5";
 import { Spinner, Avatar } from '@chakra-ui/react'
 import { supabase } from '../../utils/supabaseClient'
-import { data } from 'autoprefixer';
-
+import { useRouter } from 'next/router'
 
 
 const Profile = () => {
+  const router = useRouter();
   const [profile, setProfile] = React.useState(null)
   const [editData, setEditData] = React.useState({
     basicInfo: false,
@@ -193,6 +193,16 @@ const Profile = () => {
     }
   }
 
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.log(error)
+    } else {
+      router.push('/')
+    }
+  }
+
   useEffect(() => {
     setTimeout(() => {
         setLoading({
@@ -214,7 +224,14 @@ const Profile = () => {
         <Spinner color="#0fa84e" size="lg" thickness="3px" />
       </div>
       ) : (
-        <div className="pt-[5vh]">
+        <div className="pt-[3vh]">
+          <div 
+          onClick={() =>{
+            router.push('/messages')
+          }}
+          className="flex mb-10 text-[#0fa84e] w-[90vw] mx-auto font-extrabold items-center">
+            <IoArrowBack size={20} />
+          </div>
       <div className="w-min aspect-square relative mx-auto">
         <Avatar size="2xl" mx="auto" name={profile?.name} src={profile?.profile_pic} />
         <div className="absolute text-[#fff] right-[10%] top-[80%] w-5 aspect-square border-[3px] rounded-full">
@@ -397,7 +414,7 @@ const Profile = () => {
           <button className="bg-[#0fa84e] text-[#fff] px-4 py-2 rounded-lg text-[14px] font-semibold">Save</button>
         </div>
       </div>
-      <div className="flex justify-center my-10 font-semibold text-red-700 space-x-1 items-center">
+      <div onClick={handleLogout} className="flex justify-center cursor-pointer my-10 font-semibold text-red-700 space-x-1 items-center">
         <IoPower size={16} />
         <span className=" text-[14px]">Logout</span>
       </div>
