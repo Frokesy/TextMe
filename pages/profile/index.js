@@ -1,13 +1,36 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { IoArrowBack, IoPower } from "react-icons/io5";
 import { Spinner, Avatar } from '@chakra-ui/react'
+import { supabase } from '../../utils/supabaseClient'
+import { data } from 'autoprefixer';
+
 
 
 const Profile = () => {
+  const [profile, setProfile] = React.useState(null)
   const updatePic = (pic) => {
       console.log(pic)
   }
+  
+  const getUser = async () => {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', supabase.auth.user().id)
+    if (error) {
+        console.log(error)
+    } else {
+        setProfile(data[0])
+        console.log(data)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
+  console.log(profile?.name)
+
   return (
     <div className="pt-[5vh]">
       <div className="w-min aspect-square relative mx-auto">
@@ -23,14 +46,14 @@ const Profile = () => {
         <span className="text-neutral-400 text-[18px] font-semibold bg-transparent">Basic Info</span>
         <div className="flex flex-col mt-4 bg-transparent">
           <span className="text-neutral-400 text-[13px] bg-transparent">Name</span>
-          <span className="text-neutral-200 text-[14px] bg-transparent">John Doe</span>
+          <span className="text-neutral-200 text-[14px] bg-transparent">{profile?.name}</span>
         </div>
         <hr className="my-4" />
         <div className="flex flex-col bg-transparent">
           <span className="text-neutral-400 text-[13px] bg-transparent">Username</span>
           <span className="text-neutral-200 italic text-[14px] bg-transparent"> 
             <span className="text-[#0fa84e] bg-transparent">@</span> 
-            johndoe19
+            {profile?.username}
           </span>
         </div>
       </div>
@@ -40,7 +63,7 @@ const Profile = () => {
         <span className="text-neutral-400 text-[18px] font-semibold bg-transparent">Additional Info</span>
         <div className="flex flex-col mt-4 bg-transparent">
           <span className="text-neutral-400 text-[13px] bg-transparent">Email</span>
-          <span className="text-neutral-200 text-[14px] bg-transparent">johndoe19@gmail.com</span>
+          <span className="text-neutral-200 text-[14px] bg-transparent">{profile?.email}</span>
         </div>
         <hr className="my-4" />
         <div className="flex flex-col bg-transparent">
@@ -50,7 +73,7 @@ const Profile = () => {
         <hr className="my-4" />
         <div className="flex flex-col bg-transparent">
           <span className="text-neutral-400 text-[13px] bg-transparent mb-2">Profile Summary</span>
-          <span className="text-neutral-200 text-[14px] bg-transparent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur eaque laboriosam laborum incidunt nobis vitae saepe quia reiciendis doloribus quod?</span>
+          <span className="text-neutral-200 text-[14px] bg-transparent">{profile?.summary}</span>
         </div>
       </div>
 
