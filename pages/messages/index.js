@@ -3,21 +3,30 @@ import { FaEdit, FaSearch } from 'react-icons/fa'
 import Meta from '../../defaults/Meta'
 import { Spinner, Avatar } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { useRouter } from 'next/router'
+import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 
 const Messages = () => {
-  const router = useRouter();
   const [visible, setVisible] = React.useState(false)
+  const [profile, setProfile] = React.useState(null)
 
-  const handleClick = () => {
-    router.push('/profile')
+  const getUser = async () => {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', supabase.auth.user().id)
+    if (error) {
+        console.log(error)
+    } else {
+        setProfile(data[0])
+    }
   }
 
   useEffect(() => {
     setTimeout(() => {
       setVisible(true)
     }, 1000);
+    getUser()
   }, [])
   return (
     <div className="">
@@ -31,7 +40,7 @@ const Messages = () => {
         >
           <div className="w-[90vw] cursor-pointer items-center mx-auto pt-4 flex justify-center">
             <Link href="/profile" passHref>
-              <Avatar size="lg" mx="auto" name="DP" src="/assets/sub.jpg" />
+              <Avatar size="lg" mx="auto" name={profile?.name} src={profile?.profile_pic} />
             </Link>
           </div>
           <div className="w-[90vw] mx-auto flex items-center text-center justify-between">
