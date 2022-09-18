@@ -35,11 +35,68 @@ const Profile = () => {
     summary: '',
   })
 
-
-
   const updatePic = (pics) => {
-    console.log(pics)
+    if (pics === undefined) {
+      setMessage({
+        error: 'Please select a picture',
+        success: '',
+      })
+      setTimeout(() => {
+        setMessage({
+          error: '',
+          success: '',
+        })
+      }, 2000)
+      return;
+    }
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "loveatlast");
+      data.append("cloud_name", "dapeum1v8");
+      fetch("https://api.cloudinary.com/v1_1/dapeum1v8/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUpdate({
+            ...update,
+            pic: data.url.toString(),
+          });
+          supabase
+            .from("profiles")
+            .update({ profile_pic: data.url.toString() })
+            .eq("user_id", supabase.auth.user().id)
+            .then((data) => {
+              setProfile(data.data[0])
+              setMessage({
+                error: '',
+                success: 'Profile picture updated successfully',
+              })
+              setTimeout(() => {
+                setMessage({
+                  error: '',
+                  success: '',
+                })
+              }, 2000)
+            })
+        })
+      } else {
+        setMessage({
+          error: 'Please select a valid image',
+          success: '',
+        })
+        setTimeout(() => {
+          setMessage({
+            error: '',
+            success: '',
+          })
+        }, 2000)
+      }
   }
+
+
   const getUser = async () => {
     const { data, error } = await supabase
         .from('profiles')
@@ -159,7 +216,7 @@ const Profile = () => {
       ) : (
         <div className="pt-[5vh]">
       <div className="w-min aspect-square relative mx-auto">
-        <Avatar size="2xl" mx="auto" name={profile?.name} src="/assets/sub.jpg" />
+        <Avatar size="2xl" mx="auto" name={profile?.name} src={profile?.profile_pic} />
         <div className="absolute text-[#fff] right-[10%] top-[80%] w-5 aspect-square border-[3px] rounded-full">
             <input accept="image/*" id="icon-button-file" type="file" style={{ display: 'none' }}  onChange={(e) => updatePic( e.target.files[0])} />
             <label htmlFor="icon-button-file" className="cursor-pointer">
@@ -214,13 +271,6 @@ const Profile = () => {
             <span className="text-neutral-400 text-[18px] font-semibold bg-transparent">Basic Info</span>
             <span onClick={() => setEditData({...editData, basicInfo: true})} className="text-[#0fa84e] cursor-pointer text-[15px] font-semibold bg-transparent">Edit</span>
           </div>
-          {message ? 
-          (
-                <p 
-                className={`${ message.error && 'text-red-700' } ${ message.success && 'text-[#0fa84e]' } text-[10px] bg-transparent font-semibold mt-4 rounded-md text-center`}>
-                    { message.error ? message.error : message.success }
-                </p>
-          ) : ('')}
           <div className="flex flex-col mt-4 bg-transparent">
             <span className="text-neutral-300 text-[13px] font-semibold bg-transparent">Name</span>
             <span className="text-neutral-400 text-[14px] bg-transparent">{profile?.name}</span>
@@ -285,13 +335,6 @@ const Profile = () => {
               <span className="text-neutral-400 text-[18px] font-semibold bg-transparent">Additional Info</span>
               <span onClick={() => setEditData({...editData, additionalInfo: true})} className="text-[#0fa84e] cursor-pointer text-[15px] font-semibold bg-transparent">Edit</span>
             </div>
-            {message ? 
-            (
-                <p 
-                className={`${ message.error && 'text-red-700' } ${ message.success && 'text-[#0fa84e]' } text-[10px] bg-transparent font-semibold mt-4 rounded-md text-center`}>
-                    { message.error ? message.error : message.success }
-                </p>
-            ) : ('')}
             <div className="flex flex-col mt-4 bg-transparent">
               <span className="text-neutral-300 text-[13px] font-semibold bg-transparent">Email</span>
               <span className="text-neutral-400 text-[14px] bg-transparent">{profile?.email}</span>
