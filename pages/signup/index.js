@@ -193,7 +193,7 @@ const Signup = () => {
                 </div>
             </div>
 
-            <div className="mt-[15vh] text-[10px] italic flex flex-col space-y-2 text-center text-gray-500">
+            <div className="mt-[15vh] mb-10 text-[10px] italic flex flex-col space-y-2 text-center text-gray-500">
                 <span>V 1.0.0</span>
                 <span className="">Designed by Frokes</span>
             </div>

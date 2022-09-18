@@ -53,7 +53,7 @@ const loadingCircleTransition = {
 
 export default function Loader() {
   return (
-    <div className="flex justify-center items-center h-[90vh] w-screen">
+    <div className="flex justify-center items-center h-[80vh] w-screen">
     <motion.div
       style={loadingContainer}
       variants={loadingContainerVariants}
