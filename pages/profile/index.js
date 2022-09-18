@@ -4,6 +4,7 @@ import { IoArrowBack, IoPower } from "react-icons/io5";
 import { Spinner, Avatar } from '@chakra-ui/react'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
+import Meta from '../../defaults/Meta';
 
 
 const Profile = () => {
@@ -219,6 +220,7 @@ const Profile = () => {
 
   return (
     <div>
+      <Meta title={profile ? `${profile.username}'s profile` : 'Profile'} />
       {loading.default ? (
         <div className=" h-screen w-screen opacity-75 absolute flex items-center justify-center">
         <Spinner color="#0fa84e" size="lg" thickness="3px" />
