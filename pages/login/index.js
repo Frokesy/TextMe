@@ -58,7 +58,7 @@ const Login = () => {
                 success: "Login successful, you'll be redirected shortly",
             })
             setTimeout(() => {
-                router.push('/messages')
+                router.push('/chats')
                 setMessage({
                     error: '',
                     success: '',

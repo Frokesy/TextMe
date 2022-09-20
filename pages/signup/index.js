@@ -88,7 +88,7 @@ const Signup = () => {
                     success: "Account created, you'll be redirected shortly",
                 }),
                 setTimeout(() => {
-                    router.push("/messages")
+                    router.push("/chats")
                     setMessage({
                         error: '',
                         success: '',
