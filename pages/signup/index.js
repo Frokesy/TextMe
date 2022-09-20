@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from "next/router";
 import { Spinner } from '@chakra-ui/react'
@@ -109,9 +109,11 @@ const Signup = () => {
     <div>
     <Meta title="Create Account" />
     {loading && <div className=" h-screen w-screen opacity-75 absolute flex items-center justify-center"><Spinner color="#0fa84e" size="lg" thickness="3px" /></div>}
+    <AnimatePresence>
     <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        exit={{ y: 100 }}
         transition={{ duration: 1, delay: 0.5 }}
         className="w-[85vw] mx-auto pt-[3vh]"
     >
@@ -198,6 +200,7 @@ const Signup = () => {
                 <span className="">Designed by Frokes</span>
             </div>
         </motion.div>
+        </AnimatePresence>
     </div>
   )
 }

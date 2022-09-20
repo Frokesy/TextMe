@@ -229,7 +229,7 @@ const Profile = () => {
         <div className="pt-[3vh]">
           <div 
           onClick={() =>{
-            router.push('/messages')
+            router.push('/chats')
           }}
           className="flex mb-10 text-[#0fa84e] w-[90vw] mx-auto font-extrabold items-center">
             <IoArrowBack size={20} />

@@ -28,7 +28,6 @@ const UserProvider = ({ children }) => {
     return (
         <Provider value={{ 
             user, 
-            loading, 
             error,
             setUser,
         }}
@@ -37,3 +36,4 @@ const UserProvider = ({ children }) => {
         </Provider>
     )
 }   
+export { UserContext, UserProvider }
