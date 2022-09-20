@@ -6,6 +6,7 @@ const { Provider } = UserContext
 const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [error, setError] = useState(null)
+    const [recentSearches, setRecentSearches] = useState([])
     
     useEffect(() => {
         const fetchUser = async () => {
@@ -30,6 +31,8 @@ const UserProvider = ({ children }) => {
             user, 
             error,
             setUser,
+            recentSearches,
+            setRecentSearches
         }}
         >
             {children}
