@@ -6,9 +6,10 @@ import { Spinner, Avatar } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { supabase } from '../../utils/supabaseClient'
 import { UserContext } from '../../context/UserContext'
+import { v4 as uuidv4 } from 'uuid'
 
 const NewChat = () => {
-    const { user } = React.useContext(UserContext)
+    const { user, recentSearches, setRecentSearches } = React.useContext(UserContext)
     const [searchResult, setSearchResult] = React.useState('')
     const [searchQuery, setSearchQuery] = React.useState('')
     const [loading, setLoading] = React.useState(false)
@@ -27,7 +28,47 @@ const NewChat = () => {
         setLoading(false)
         setSearchResult(data)
       }, 500)
+      return
     }
+
+    const createChat = async (id) => {
+      console.log(id)
+      //check if chat has already been created
+      const { data: chatData, error:chatError } = await supabase
+      .from('chats')
+      .select('*')
+      .eq('user_id', user.user_id)
+      .eq('recipient_id', id)
+      if (chatError) {
+        console.log(chatError)
+      }
+      if (chatData?.length === 0) {
+        console.log(chatData)
+        console.log('chat created')
+        const { data, error } = await supabase
+        .from('chats')
+        .insert([
+          {
+            chat_id: uuidv4(), 
+            user_id: user.user_id,
+            recipient_id: id
+          }
+        ])
+        if (error) {
+          console.log(error)
+        }
+        console.log(data)
+      // //add id to local storage and set recent searches to the result
+      // const recentSearch = JSON.parse(localStorage.getItem('recentSearches'))
+      // const newRecentSearches = [...recentSearch, id]
+      // localStorage.setItem('recentSearches', JSON.stringify(newRecentSearches))
+      // setRecentSearches(newRecentSearches)
+      return
+      } else {
+        console.log('chat already exists')
+      }
+    }
+      console.log(recentSearches)
   return (
     <div>
         <div className="w-[90vw] cursor-pointer items-center mx-auto pt-4 flex justify-center">
@@ -75,20 +116,24 @@ const NewChat = () => {
                 </div>
               ) : (
                 <div>
-                  {searchResult.length ? (
+                  {searchResult?.length ? (
                     <div>
-                      {searchResult.map((result) => (
-                        <div key={result.id} className="flex flex-col">
+                      {searchResult?.map((result) => (
+                        <div 
+                        key={result.id} 
+                        className="flex cursor-pointer flex-col"
+                        onClick={() => createChat(result?.user_id)}
+                        >
                           <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center">
                             <Avatar size="sm" name={result.username} src={result.profile_pic} />
-                            <div className="flex flex-col mx-4 space-y-1">
+                            <div className="flex flex-col mx-4 space-y-1" >
                               <span className="text-neutral-400 text-[14px] font-semibold">{result.name}</span>
                               <span className="text-neutral-400 text-[10px]">username: {result.username}</span>
                             </div>
                           </div>
                         </div>
-                        {searchResult.length > 1 && (
+                        {searchResult?.length > 1 && (
                           <hr className=" my-2 w-full mr-5 mx-auto "/>
                         )}
                         </div>
