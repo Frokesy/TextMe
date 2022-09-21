@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaEdit, FaSearch } from 'react-icons/fa'
 import Meta from '../../defaults/Meta'
 import { Spinner, Avatar } from '@chakra-ui/react'
@@ -13,6 +13,8 @@ const NewChat = () => {
     const [searchResult, setSearchResult] = React.useState('')
     const [searchQuery, setSearchQuery] = React.useState('')
     const [loading, setLoading] = React.useState(false)
+    const [newRecentSearch, setNewRecentSearch] = React.useState('')
+    let recentSearch = []
 
     const getSearchResults = async (e) => {
       setSearchQuery(e.target.value)
@@ -21,6 +23,7 @@ const NewChat = () => {
         const { data, error } = await supabase
         .from('profiles')
         .select('*')
+        .neq('user_id', supabase.auth.user().id)
         .ilike('username', `%${searchQuery}%`)
       if (error) {
         console.log(error)
@@ -31,44 +34,68 @@ const NewChat = () => {
       return
     }
 
-    const createChat = async (id) => {
-      console.log(id)
-      //check if chat has already been created
-      const { data: chatData, error:chatError } = await supabase
-      .from('chats')
-      .select('*')
-      .eq('user_id', user.user_id)
-      .eq('recipient_id', id)
-      if (chatError) {
-        console.log(chatError)
-      }
-      if (chatData?.length === 0) {
-        console.log(chatData)
-        console.log('chat created')
-        const { data, error } = await supabase
-        .from('chats')
-        .insert([
-          {
-            chat_id: uuidv4(), 
-            user_id: user.user_id,
-            recipient_id: id
-          }
-        ])
-        if (error) {
-          console.log(error)
+    const createChat = async (id, pic, username) => {
+      const newRecentSearch = [
+        {
+          id: id,
+          pic: pic,
+          username: username
         }
-        console.log(data)
-      // //add id to local storage and set recent searches to the result
-      // const recentSearch = JSON.parse(localStorage.getItem('recentSearches'))
-      // const newRecentSearches = [...recentSearch, id]
-      // localStorage.setItem('recentSearches', JSON.stringify(newRecentSearches))
-      // setRecentSearches(newRecentSearches)
-      return
-      } else {
-        console.log('chat already exists')
+      ]
+      //add newRecentSearch to local storage
+      recentSearch = JSON.parse(localStorage.getItem('recentSearches')) || []
+      const searches = newRecentSearch.concat(recentSearch)
+      localStorage.setItem('recentSearches', JSON.stringify(searches))
+      if (typeof window !== 'undefined') {
+        const search = JSON.parse(localStorage.getItem('recentSearches'))
+        setRecentSearches(search)  
       }
+
+      // //check if chat has already been created
+      // const { data: chatData, error:chatError } = await supabase
+      // .from('chats')
+      // .select('*')
+      // .eq('user_id', user.user_id)
+      // .eq('recipient_id', id)
+      // if (chatError) {
+      //   console.log(chatError)
+      // }
+      // if (chatData?.length === 0) {
+      //   console.log('chat created')
+      //   const { data, error } = await supabase
+      //   .from('chats')
+      //   .insert([
+      //     {
+      //       chat_id: uuidv4(), 
+      //       user_id: user.user_id,
+      //       recipient_id: id
+      //     }
+      //   ])
+      //   if (error) {
+      //     console.log(error)
+      //   }
+      //   console.log(data)
+      //   setRecentSearches([...recentSearches, id])
+      // return
+      // } else {
+      //   console.log('chat already exists')
+      // }
     }
-      console.log(recentSearches)
+
+    useEffect(() => {
+          const search = JSON.parse(localStorage.getItem('recentSearches'))
+          setRecentSearches(search)
+          //setTimeout to clear recentSearches from local storage after 1 hour
+          setTimeout(() => {
+            localStorage.removeItem('recentSearches')
+            setRecentSearches([])
+          }, 3600000)
+    }, [])
+
+    console.log(recentSearches)
+    
+
+
   return (
     <div>
         <div className="w-[90vw] cursor-pointer items-center mx-auto pt-4 flex justify-center">
@@ -96,16 +123,27 @@ const NewChat = () => {
 
           <div className="mt-4 w-[90vw] mx-auto">
             <h1 className="text-neutral-400 font-semibold text-[16px]">Recently Searched</h1>
-            <span className="text-center flex justify-center mt-[5vh] text-[10px] font-light text-gray-500">You have no recent searches in the last seven days</span>
+            {recentSearches?.length > 0 ? (
+              <div className="mt-4 -mb-4 flex justify-start space-x-12 max-w-[90vw] overflow-scroll">
+              {recentSearches?.map((search, index) => (
+                <div key={index} className="flex flex-col items-center space-y-1 text-center mt-2">
+                  <Avatar size="lg" name={search.username} src={search.pic} />
+                  <span className="text-neutral-400 text-[10px] lowercase">@{search.username}</span>
+                  </div>
+              ))}
+            </div>
+            ) : (
+              <div className="mt-2">
+                <span className="text-center flex justify-center mt-[5vh] text-[10px] font-light text-gray-500">No recent searches</span>
+              </div>
+            )}
+
           </div>
           <hr className="mt-14 w-[90vw] mx-auto" />
           <div className="mt-4 w-[90vw] mx-auto">
             <h1 className="text-neutral-400 font-semibold text-[16px]">Latest Search results</h1>
             {searchQuery.length < 1 ? (
-              <span 
-              className="text-center flex justify-center mt-[5vh] text-[10px] font-light text-gray-500"
-              onChange={getSearchResults}
-              >
+              <span className="text-center flex justify-center mt-[5vh] text-[10px] font-light text-gray-500">
                 You have not made any search requests yet.
               </span>
             ) : (
@@ -122,7 +160,7 @@ const NewChat = () => {
                         <div 
                         key={result.id} 
                         className="flex cursor-pointer flex-col"
-                        onClick={() => createChat(result?.user_id)}
+                        onClick={() => createChat(result?.user_id, result?.profile_pic, result?.username)}
                         >
                           <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center">
