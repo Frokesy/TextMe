@@ -84,15 +84,17 @@ const NewChat = () => {
         router.push(`/inbox/${chatData[0].chat_id}`)
       }
     }
+    if (typeof window !== 'undefined') {
+      //setTimeout to clear recentSearches from local storage after 1 hour
+      setTimeout(() => {
+        localStorage.removeItem('recentSearches')
+        setRecentSearches([])
+      }, 3600000)
+    }
 
     useEffect(() => {
           const search = JSON.parse(localStorage.getItem('recentSearches'))
           setRecentSearches(search)
-          //setTimeout to clear recentSearches from local storage after 1 hour
-          setTimeout(() => {
-            localStorage.removeItem('recentSearches')
-            setRecentSearches([])
-          }, 3600000)
     }, [setRecentSearches])    
 
 
@@ -127,7 +129,7 @@ const NewChat = () => {
             {recentSearches?.length > 0 ? (
               <div className="mt-4 -mb-4 flex justify-start space-x-12 max-w-[90vw] overflow-scroll">
               {recentSearches?.map((search, index) => (
-                <div key={index} className="flex flex-col items-center space-y-1 text-center mt-2">
+                <div key={index} onClick={() => createChat(search?.id, search?.pic, search?.username, search?.name)} className="flex flex-col items-center space-y-1 text-center mt-2">
                   <Avatar size="lg" name={search.username} src={search.pic} />
                   <span className="text-neutral-400 text-[10px] lowercase">@{search.username}</span>
                   </div>

@@ -31,7 +31,7 @@ const Inbox = () => {
         {chats?.map((chat) => (
           <div key={chat.chat_id}
             className="flex items-center justify-between w-full py-4">
-            <div className="font-extrabold text-[#0fa84e]">
+            <div onClick={() => router.push('/chats')} className="font-extrabold text-[#0fa84e]">
               <IoArrowBack size={20} />
             </div>              
             <div>
@@ -42,7 +42,6 @@ const Inbox = () => {
             </div>              
             <div className="flex items-center space-x-3 text-[#0fa84e] text-[20px]">
               <FaVideo />
-              {/* <FaPhone /> */}
             </div>              
           </div>
         ))}

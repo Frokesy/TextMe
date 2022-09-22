@@ -7,18 +7,32 @@ import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { UserContext } from '../../context/UserContext'
+import ChatList from '../../components/chats/ChatList'
 
 const Messages = () => {
   const router = useRouter()
   const { user } = React.useContext(UserContext)
   const [visible, setVisible] = React.useState(false)
-  const [profile, setProfile] = React.useState(null)
+  const [chats, setChats] = React.useState([])
 
   useEffect(() => {
     setTimeout(() => {
       setVisible(true)
     }, 1000)
   }, [])
+  useEffect(() => {
+    const fetchChats = async () => {
+        const { data, error } = await supabase
+        .from('chats')
+        .select('*')
+        .eq('user_id', user?.user_id)
+        if (error) {
+            return
+        }
+        setChats(data)
+    }
+    fetchChats()
+}, [user?.user_id])
   return (
     <AnimatePresence>
     <div className="">
@@ -43,9 +57,19 @@ const Messages = () => {
               <FaSearch className="bg-transparent"/>
               <input type="text" placeholder="Search" className="w-full h-full hover:border-none focus:border-none bg-transparent offset-0 outline-none border-none"/>
           </div>
-        <div className="h-[60vh] w-screen text-center flex items-center justify-center">
-          <h1 className="text-gray-500 text-[11px] font-light">No messages yet, start a conversation today!</h1>
-        </div>
+          {chats?.length === 0 ? (
+                    <div className="h-[60vh] w-screen text-center flex items-center justify-center">
+                    <h1 className="text-gray-500 text-[11px] font-light">No messages yet, start a conversation today!</h1>
+                  </div>
+                  ) : (
+                    <div>
+                      {chats?.map((chats) => (
+                        <div key={chats.chat_id}>
+                          <ChatList chats={chats} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
         </motion.div>
       ) : (
         <div className=" h-screen w-screen opacity-75 absolute flex items-center justify-center">
