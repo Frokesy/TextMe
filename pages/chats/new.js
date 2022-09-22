@@ -7,13 +7,14 @@ import { motion } from 'framer-motion'
 import { supabase } from '../../utils/supabaseClient'
 import { UserContext } from '../../context/UserContext'
 import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'next/router'
 
 const NewChat = () => {
+    const router = useRouter()
     const { user, recentSearches, setRecentSearches } = React.useContext(UserContext)
     const [searchResult, setSearchResult] = React.useState('')
     const [searchQuery, setSearchQuery] = React.useState('')
     const [loading, setLoading] = React.useState(false)
-    const [newRecentSearch, setNewRecentSearch] = React.useState('')
     let recentSearch = []
 
     const getSearchResults = async (e) => {
@@ -34,12 +35,13 @@ const NewChat = () => {
       return
     }
 
-    const createChat = async (id, pic, username) => {
+    const createChat = async (id, pic, username, name) => {
       const newRecentSearch = [
         {
           id: id,
           pic: pic,
-          username: username
+          username: username,
+          name: name
         }
       ]
       //add newRecentSearch to local storage
@@ -51,35 +53,36 @@ const NewChat = () => {
         setRecentSearches(search)  
       }
 
-      // //check if chat has already been created
-      // const { data: chatData, error:chatError } = await supabase
-      // .from('chats')
-      // .select('*')
-      // .eq('user_id', user.user_id)
-      // .eq('recipient_id', id)
-      // if (chatError) {
-      //   console.log(chatError)
-      // }
-      // if (chatData?.length === 0) {
-      //   console.log('chat created')
-      //   const { data, error } = await supabase
-      //   .from('chats')
-      //   .insert([
-      //     {
-      //       chat_id: uuidv4(), 
-      //       user_id: user.user_id,
-      //       recipient_id: id
-      //     }
-      //   ])
-      //   if (error) {
-      //     console.log(error)
-      //   }
-      //   console.log(data)
-      //   setRecentSearches([...recentSearches, id])
-      // return
-      // } else {
-      //   console.log('chat already exists')
-      // }
+      //check if chat has already been created
+      const { data: chatData, error:chatError } = await supabase
+      .from('chats')
+      .select('*')
+      .eq('user_id', user.user_id)
+      .eq('recipient_id', id)
+      if (chatError) {
+        console.log(chatError)
+      }
+      if (chatData?.length === 0) {
+        const { data, error } = await supabase
+        .from('chats')
+        .insert([
+          {
+            chat_id: uuidv4(), 
+            user_id: user.user_id,
+            recipient_id: id,
+            recipient_name: name,
+            recipient_username: username,
+            recipient_pic: pic,
+          }
+        ])
+        if (error) {
+          console.log(error)
+        }
+        router.push(`/inbox/${data[0].chat_id}`)
+      return
+      } else {
+        router.push(`/inbox/${chatData[0].chat_id}`)
+      }
     }
 
     useEffect(() => {
@@ -90,14 +93,12 @@ const NewChat = () => {
             localStorage.removeItem('recentSearches')
             setRecentSearches([])
           }, 3600000)
-    }, [])
-
-    console.log(recentSearches)
-    
+    }, [setRecentSearches])    
 
 
   return (
     <div>
+      <Meta title="New Chat" />
         <div className="w-[90vw] cursor-pointer items-center mx-auto pt-4 flex justify-center">
             <Link href="/profile" passHref>
               <Avatar size="lg" mx="auto" name={user?.name} src={user?.profile_pic} />
@@ -160,7 +161,7 @@ const NewChat = () => {
                         <div 
                         key={result.id} 
                         className="flex cursor-pointer flex-col"
-                        onClick={() => createChat(result?.user_id, result?.profile_pic, result?.username)}
+                        onClick={() => createChat(result?.user_id, result?.profile_pic, result?.username, result?.name)}
                         >
                           <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center">
