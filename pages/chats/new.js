@@ -57,18 +57,19 @@ const NewChat = () => {
       const { data: chatData, error:chatError } = await supabase
       .from('chats')
       .select('*')
-      .eq('user_id', user.user_id)
-      .eq('recipient_id', id)
       if (chatError) {
         console.log(chatError)
       }
-      if (chatData?.length === 0) {
+      const chatExists = chatData.find(chat => chat.user_id === supabase.auth.user().id && chat.recipient_id === id) || chatData.find(chat => chat.user_id === id && chat.recipient_id === supabase.auth.user().id)
+      if (chatExists) {
+        router.push(`/inbox/${chatExists.chat_id}`)
+      } else {        
         const { data, error } = await supabase
         .from('chats')
         .insert([
           {
             chat_id: uuidv4(), 
-            user_id: user.user_id,
+            user_id: user?.user_id,
             recipient_id: id,
             recipient_name: name,
             recipient_username: username,
@@ -79,17 +80,15 @@ const NewChat = () => {
           console.log(error)
         }
         router.push(`/inbox/${data[0].chat_id}`)
-      return
-      } else {
-        router.push(`/inbox/${chatData[0].chat_id}`)
       }
-    }
+
     if (typeof window !== 'undefined') {
       //setTimeout to clear recentSearches from local storage after 1 hour
       setTimeout(() => {
         localStorage.removeItem('recentSearches')
         setRecentSearches([])
       }, 3600000)
+     }
     }
 
     useEffect(() => {

@@ -1,7 +1,6 @@
 import { Avatar } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { supabase } from '../../utils/supabaseClient'
 
 const ChatList = ({chats}) => {
     const router = useRouter()
