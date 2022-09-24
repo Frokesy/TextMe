@@ -34,7 +34,6 @@ const NewChat = () => {
       }, 500)
       return
     }
-
     const createChat = async (id, pic, username, name) => {
       const newRecentSearch = [
         {
@@ -60,7 +59,7 @@ const NewChat = () => {
       if (chatError) {
         console.log(chatError)
       }
-      const chatExists = chatData.find(chat => chat.user_id === supabase.auth.user().id && chat.recipient_id === id) || chatData.find(chat => chat.user_id === id && chat.recipient_id === supabase.auth.user().id)
+      const chatExists = chatData.find(chat => chat.sender_id === supabase.auth.user().id && chat.recipient_id === id) || chatData.find(chat => chat.sender_id === id && chat.recipient_id === supabase.auth.user().id)
       if (chatExists) {
         router.push(`/inbox/${chatExists.chat_id}`)
       } else {        
@@ -69,7 +68,10 @@ const NewChat = () => {
         .insert([
           {
             chat_id: uuidv4(), 
-            user_id: user?.user_id,
+            sender_id: user?.user_id,
+            sender_name: user?.name,
+            sender_username: user?.username,
+            sender_pic: user?.profile_pic,
             recipient_id: id,
             recipient_name: name,
             recipient_username: username,
@@ -82,21 +84,20 @@ const NewChat = () => {
         router.push(`/inbox/${data[0].chat_id}`)
       }
 
-    if (typeof window !== 'undefined') {
-      //setTimeout to clear recentSearches from local storage after 1 hour
-      setTimeout(() => {
-        localStorage.removeItem('recentSearches')
-        setRecentSearches([])
-      }, 3600000)
-     }
+
     }
 
+    if (typeof window !== 'undefined') {
+      //setTimeout to clear recentSearches from local storage after 30 minutes
+      setInterval(() => {
+        localStorage.removeItem('recentSearches')
+        setRecentSearches([])
+      }, 1800000)
+     }
     useEffect(() => {
           const search = JSON.parse(localStorage.getItem('recentSearches'))
           setRecentSearches(search)
     }, [setRecentSearches])    
-
-
   return (
     <div>
       <Meta title="New Chat" />

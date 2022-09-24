@@ -14,25 +14,51 @@ const Messages = () => {
   const { user } = React.useContext(UserContext)
   const [visible, setVisible] = React.useState(false)
   const [chats, setChats] = React.useState([])
-
+  const [pos, setPos] = React.useState({
+    sender: '',
+    recipient: '',
+})
   useEffect(() => {
     setTimeout(() => {
       setVisible(true)
     }, 1000)
   }, [])
   useEffect(() => {
-    const fetchChats = async () => {
-        const { data, error } = await supabase
-        .from('chats')
-        .select('*')
-        .eq('user_id', user?.user_id)
-        if (error) {
-            return
+        //fetch chats where the user id matches any of the ids in the users array
+        const fetchChats = async () => {
+            const { data, error } = await supabase
+            .from('chats')
+            .select('*, users!inner(0:users(*)), users!inner(1:users(*))')
+            console.log(data, 'data')
+            // //map through the data and filter out the chats where the user id matches the id in the users array
+            // const filteredChats = data.filter((chat) => chat[0].users.includes(user.user_id) || chat[1].users.includes(user.user_id))
+            //     console.log(filteredChats, 'filtered chats')
+            
+        
+        // const fetchChats = async () => {
+        //   const { data, error } = await supabase
+        //     .from('chats')
+        //     .select('*')
+        //     .eq('users', [supabase.auth.user().id])
+        //   if (error) {
+        //     console.log(error)
+        //   }
+        //   console.log(data)
+          // const chat = data?.map((chat) => {
+          //   const recipient = chat.users.find((user) => user !== supabase.auth.user().id)
+          //   const { data, error } = supabase
+          //     .from('profiles')
+          //     .select('*')
+          //     .eq('user_id', recipient)
+          //   if (error) {
+          //     console.log(error)
+          //   }
+          //   console.log(data)
+          // })
         }
-        setChats(data)
-    }
     fetchChats()
-}, [user?.user_id])
+}, [])
+console.log(chats)
   return (
     <AnimatePresence>
     <div className="">
