@@ -14,51 +14,43 @@ const Messages = () => {
   const { user } = React.useContext(UserContext)
   const [visible, setVisible] = React.useState(false)
   const [chats, setChats] = React.useState([])
-  const [pos, setPos] = React.useState({
-    sender: '',
-    recipient: '',
-})
+  const [recipient1, setRecipient1] = React.useState([])
+  const [recipient2, setRecipient2] = React.useState([])
   useEffect(() => {
     setTimeout(() => {
       setVisible(true)
     }, 1000)
-  }, [])
-  useEffect(() => {
-        //fetch chats where the user id matches any of the ids in the users array
-        const fetchChats = async () => {
-            const { data, error } = await supabase
-            .from('chats')
-            .select('*, users!inner(0:users(*)), users!inner(1:users(*))')
-            console.log(data, 'data')
-            // //map through the data and filter out the chats where the user id matches the id in the users array
-            // const filteredChats = data.filter((chat) => chat[0].users.includes(user.user_id) || chat[1].users.includes(user.user_id))
-            //     console.log(filteredChats, 'filtered chats')
-            
-        
-        // const fetchChats = async () => {
-        //   const { data, error } = await supabase
-        //     .from('chats')
-        //     .select('*')
-        //     .eq('users', [supabase.auth.user().id])
-        //   if (error) {
-        //     console.log(error)
-        //   }
-        //   console.log(data)
-          // const chat = data?.map((chat) => {
-          //   const recipient = chat.users.find((user) => user !== supabase.auth.user().id)
-          //   const { data, error } = supabase
-          //     .from('profiles')
-          //     .select('*')
-          //     .eq('user_id', recipient)
-          //   if (error) {
-          //     console.log(error)
-          //   }
-          //   console.log(data)
-          // })
-        }
+
+    const fetchChats = async () => {
+      const { data, error } = await supabase
+      .from('chats')
+      .select('*')
+      .eq('sender_id', supabase.auth.user().id)
+      if (error) {
+          console.log(error)
+      }
+      setRecipient1(data)
+  }
     fetchChats()
-}, [])
-console.log(chats)
+  }, [user?.user_id])
+
+  useEffect(() => {
+    const fetchOtherChats = async () => {
+      const { data, error } = await supabase
+      .from('chats')
+      .select('*')
+      .eq('recipient_id', supabase.auth.user().id)
+      if (error) {
+          console.log(error)
+      }
+      setRecipient2(data)
+  }
+    fetchOtherChats()
+  }, [user?.user_id])
+  useEffect(() => {
+    const mergedChats = recipient1.concat(recipient2)
+    setChats(mergedChats)
+  }, [recipient1, recipient2])
   return (
     <AnimatePresence>
     <div className="">
