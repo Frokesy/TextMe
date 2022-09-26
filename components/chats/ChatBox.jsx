@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaCamera } from 'react-icons/fa'
 import { IoArrowUp, IoArrowUpCircle } from 'react-icons/io5'
 import { UserContext } from '../../context/UserContext'
@@ -7,6 +7,7 @@ import { supabase } from '../../utils/supabaseClient'
 const ChatBox = ({ chatData }) => {
     const { user } = React.useContext(UserContext)
     const [message, setMessage] = React.useState('')
+    const [messages, setMessages] = React.useState([])
 
     const sendMessage = async (e) => {
         e.preventDefault()
@@ -35,11 +36,38 @@ const ChatBox = ({ chatData }) => {
             }
             setMessage('')
         } catch (error) {
-            console.log(error)
+            return
         }
     }
+    const fetchMessages = async () => {
+      const { data, error } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('chat_id', chatData[0]?.chat_id)
+      // if (error) {
+      //     console.log(error)
+      // }
+      setMessages(data)
+  }
+  fetchMessages()
+    useEffect(() => {
+
+    }, [chatData])
   return (
     <div>
+      <div className="message-container mt-4">
+        {messages?.map((message) => (
+          <div
+            key={message.id}
+            className={`message ${ message.sender_id === user?.user_id ? 'flex justify-end' : 'flex justify-start' }`}
+          >
+            <span 
+              className={`message ${
+                message.sender_id === user?.user_id ? 'flex justify-end mt-1 max-w-[60vw] mx-4 rounded-full text-gray-200 font-light text-[12px] bg-blue-500 p-3' : 'justify-start mt-1 max-w-[60vw] mx-4 rounded-full text-gray-200 font-light text-[12px] bg-gray-500 p-3'}`}
+            >{message.message}</span>
+          </div>
+        ))}
+      </div>
       <div className="message-input">
         <div className="fixed bottom-2 w-full">
             <div className="flex items-center justify-between space-x-2 px-2">
