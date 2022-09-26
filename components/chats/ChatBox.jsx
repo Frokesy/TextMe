@@ -1,10 +1,43 @@
 import React from 'react'
 import { FaCamera } from 'react-icons/fa'
 import { IoArrowUp, IoArrowUpCircle } from 'react-icons/io5'
+import { UserContext } from '../../context/UserContext'
+import { supabase } from '../../utils/supabaseClient'
 
 const ChatBox = ({ chatData }) => {
+    const { user } = React.useContext(UserContext)
     const [message, setMessage] = React.useState('')
-    console.log(chatData)
+
+    const sendMessage = async (e) => {
+        e.preventDefault()
+        if (!message) {
+            return
+        }
+        try {
+            const { data, error } = await supabase
+                .from('messages')
+                .insert([
+                    {
+                        chat_id: chatData[0]?.chat_id,
+                        message: message,
+                        sender_id: user?.user_id,
+                    },
+                ])
+            if (error) {
+                throw error
+            }
+            const { data: lastMessage, error: lastMessageError } = await supabase
+                .from('chats')
+                .update({ last_message: message })
+                .eq('chat_id', chatData[0]?.chat_id)
+            if (lastMessageError) {
+                throw lastMessageError
+            }
+            setMessage('')
+        } catch (error) {
+            console.log(error)
+        }
+    }
   return (
     <div>
       <div className="message-input">

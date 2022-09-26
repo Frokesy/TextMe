@@ -297,7 +297,7 @@ const Profile = () => {
           <hr className="my-4" />
           <div className="flex flex-col bg-transparent">
             <span className="text-neutral-300 text-[13px] font-semibold bg-transparent">Username</span>
-            <span className="text-neutral-400 text-[14px] bg-transparent"> 
+            <span className="text-neutral-400 text-[14px] lowercase bg-transparent"> 
               <span className="text-[#0fa84e] bg-transparent">@</span> 
               {profile?.username}
             </span>

@@ -4,12 +4,14 @@ import React, { useEffect } from 'react'
 import { FaPhone, FaVideo } from 'react-icons/fa'
 import { IoArrowBack } from 'react-icons/io5'
 import ChatBox from '../../components/chats/ChatBox'
+import { UserContext } from '../../context/UserContext'
 import { supabase } from '../../utils/supabaseClient'
 
 
 const Inbox = () => {
   const router = useRouter()
   const { chatId } = router.query
+  const { user } = React.useContext(UserContext)
   const [chats, setChats] = React.useState([])
   
   useEffect(() => {
@@ -36,8 +38,10 @@ const Inbox = () => {
             </div>              
             <div>
             <div className="items-center text-center">
-                <Avatar size="md" name={chat.recipient_name} src={chat.recipient_pic} />
-                <p className="text-[12px] text-gray-500 font-semibold">{chat.recipient_username}</p>
+                <Avatar size="md"
+                 name={user?.user_id === chat.recipient_id ? chat.sender_name : chat.recipient_name} 
+                 src={user?.user_id === chat.recipient_id ? chat.sender_pic : chat.recipient_pic} />
+                <p className="text-[12px] text-gray-500 font-semibold">{user?.user_id === chat.recipient_id ? chat.sender_username : chat.recipient_username}</p>
               </div>
             </div>              
             <div className="flex items-center space-x-3 text-[#0fa84e] text-[20px]">
