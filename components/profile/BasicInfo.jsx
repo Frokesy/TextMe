@@ -123,7 +123,7 @@ const BasicInfo = ({ profile, setProfile }) => {
                 className={`${ message.error && 'text-red-700' } ${ message.success && 'text-[#0fa84e]' } text-[10px] bg-transparent font-semibold mt-4 rounded-md text-center`}>
                     { message.error ? message.error : message.success }
                 </p>
-        ) : ('')}
+          ) : ('')}
           <div className="flex flex-col mt-4 bg-transparent">
             <span className="text-neutral-300 text-[13px] font-semibold bg-transparent">Name</span>
             <span className="text-neutral-400 text-[14px] bg-transparent">{profile?.name}</span>

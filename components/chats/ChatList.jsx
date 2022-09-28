@@ -22,8 +22,8 @@ const ChatList = ({chats}) => {
     }, [chats.last_message_time])
   return (
     <div className="w-[98vw] mx-auto mt-4 space-x-2 px-3 text-[#ccc] flex flex-col text-[13px]">
-      <div className="flex justify-between items-center space-x-2">
-      <div className="flex items-center space-x-2">
+      <div className="flex justify-between items-center space-x-1">
+      <div className="flex items-center space-x-3">
         <div className="">
         <Avatar size="md" 
         name={user?.user_id === chats.recipient_id ? chats.sender_name : chats.recipient_name} 
@@ -37,7 +37,7 @@ const ChatList = ({chats}) => {
         </div>
       </div>
       <div className="flex">
-          <span className="text-gray-400 text-[11px] font-light">{messageTime}</span>
+          <span className="text-gray-400 text-[10px] font-light">{messageTime}</span>
         </div>
       </div>
       <div className="w-[94vw] border-b border-gray-600 mt-4" />
