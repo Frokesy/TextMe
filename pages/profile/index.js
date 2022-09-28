@@ -5,6 +5,7 @@ import { Spinner, Avatar } from '@chakra-ui/react'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
 import Meta from '../../defaults/Meta';
+import BasicInfo from '../../components/profile/BasicInfo';
 
 
 const Profile = () => {
@@ -18,7 +19,6 @@ const Profile = () => {
   })
   const [loading, setLoading] = React.useState({
     default: true,
-    basicInfo: false,
     additionalInfo: false,
     links: false,
     password: false,
@@ -29,8 +29,6 @@ const Profile = () => {
   })
   const [update, setUpdate] = React.useState({
     pic: '',
-    name: '',
-    username: '',
     email: '',
     mobile: '',
     summary: '',
@@ -108,48 +106,6 @@ const Profile = () => {
     } else {
         setProfile(data[0])
     }
-  }
-
-  const updateBasicInfo = async (e) => {
-    e.preventDefault()
-    setLoading({
-      ...loading,
-      basicInfo: true,  
-    })
-    const name = update.name ? update.name : profile.name
-    const username = update.username ? update.username : profile.username
-    const { data, error } = await supabase
-        .from('profiles')
-        .update({ name, username })
-        .eq('user_id', supabase.auth.user().id)
-    if (error) {
-        console.log(error)
-        setMessage({
-            error: error.message,
-            success: '',
-        })
-    } else {
-        setProfile(data[0])
-        setMessage({
-            error: '',
-            success: 'Profile updated successfully',
-        })
-        setTimeout(() => {
-            setMessage({
-                error: '',
-                success: '',
-            })
-        }, 2000)
-        setEditData({
-            ...editData,
-            basicInfo: false,
-        })
-        setLoading({
-          ...loading,
-          basicInfo: false,
-      })
-    }
-
   }
 
   const updateAdditionalInfo = async (e) => {
@@ -252,59 +208,7 @@ const Profile = () => {
         ) : ('')}
 
 
-      <div className="w-[90vw] bg-neutral-800 rounded-lg shadow-md py-4 px-4 flex flex-col mx-auto mt-10">
-        {editData.basicInfo ? (
-          <div className="flex flex-col bg-transparent">
-            <span className="text-neutral-400 text-[18px] font-semibold bg-transparent">Basic Info</span>
-            <form className="bg-transparent" onSubmit={updateBasicInfo}>
-              <div className="flex flex-col mt-4 bg-transparent">
-                <label className="text-neutral-400 text-[13px] font-semibold bg-transparent">Name</label>
-                <input type="text" 
-                className="bg-transparent border-b-[1px] border-neutral-400 mt-4 text-neutral-400 text-[13px] font-semibold focus:border-b-[1px] offset-0 outline-none hover:border-b-[1px]" 
-                placeholder={profile.name}
-                value={update.name}
-                onChange={(e) => setUpdate({ ...update, name: e.target.value })}
-                />
-              </div>
-              <div className="flex flex-col mt-4 bg-transparent">
-                <label className="text-neutral-400 text-[13px] font-semibold bg-transparent">Username</label>
-                <input type="text" 
-                className="bg-transparent border-b-[1px] border-neutral-400 mt-4 text-neutral-400 text-[13px] font-semibold focus:border-b-[1px] offset-0 outline-none hover:border-b-[1px]" 
-                placeholder={profile.username}
-                value={update.username}
-                onChange={(e) => setUpdate({ ...update, username: e.target.value })}
-                />
-              </div>
-              <div className="flex bg-transparent flex-row justify-end mt-4">
-                <button 
-                  className="bg-[#0fa84e] text-[#fff] px-4 py-2 rounded-lg text-[12px] font-semibold">
-                    
-                      Save
-                </button>
-              </div>
-            </form>
-          </div>
-        ) : (
-        <div className="bg-transparent">
-          <div className="flex justify-between bg-transparent">
-            <span className="text-neutral-400 text-[18px] font-semibold bg-transparent">Basic Info</span>
-            <span onClick={() => setEditData({...editData, basicInfo: true})} className="text-[#0fa84e] cursor-pointer text-[15px] font-semibold bg-transparent">Edit</span>
-          </div>
-          <div className="flex flex-col mt-4 bg-transparent">
-            <span className="text-neutral-300 text-[13px] font-semibold bg-transparent">Name</span>
-            <span className="text-neutral-400 text-[14px] bg-transparent">{profile?.name}</span>
-          </div>
-          <hr className="my-4" />
-          <div className="flex flex-col bg-transparent">
-            <span className="text-neutral-300 text-[13px] font-semibold bg-transparent">Username</span>
-            <span className="text-neutral-400 text-[14px] lowercase bg-transparent"> 
-              <span className="text-[#0fa84e] bg-transparent">@</span> 
-              {profile?.username}
-            </span>
-          </div>
-        </div>
-        )}
-      </div>
+        <BasicInfo profile={profile} setProfile={setProfile} />
 
 
       <div className="w-[90vw] bg-neutral-800 rounded-lg shadow-md py-4 px-4 flex flex-col mx-auto mt-6">
