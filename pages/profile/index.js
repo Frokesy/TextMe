@@ -34,10 +34,6 @@ const Profile = () => {
     summary: '',
   })
 
-  if (supabase.auth.user() === null) {
-    router.push('/login')
-  }
-  
   const updatePic = (pics) => {
     if (pics === undefined) {
       setMessage({
@@ -164,6 +160,13 @@ const Profile = () => {
     }
   }
 
+  useEffect(() => {
+    if (supabase.auth.user() === null) {
+      router.push('/login')
+    } else if (profile?.user_id === null) {
+      router.push('/login')
+    }
+  }, [router, profile?.user_id])
 
   useEffect(() => {
     const updateDataInChat = async () => {

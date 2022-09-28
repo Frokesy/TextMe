@@ -13,11 +13,14 @@ const Inbox = () => {
   const { chatId } = router.query
   const { user } = React.useContext(UserContext)
   const [chats, setChats] = React.useState([])
-
-  if (supabase.auth.user() === null) {
-    router.push('/login')
-  }
   
+  useEffect(() => {
+    if (supabase.auth.user() === null) {
+      router.push('/login')
+    } else if (user?.user_id === null) {
+      router.push('/login')
+    }
+  }, [router, user?.user_id])
   useEffect(() => {
     const fetchChat = async () => {
       const { data, error } = await supabase
@@ -31,6 +34,7 @@ const Inbox = () => {
   }
     fetchChat()
   }, [chatId])
+  console.log(user?.user_id)
   return (
     <div>
       <div className="flex justify-between w-full border-b border-gray-500 px-8">

@@ -16,11 +16,7 @@ const NewChat = () => {
     const [searchQuery, setSearchQuery] = React.useState('')
     const [loading, setLoading] = React.useState(false)
     let recentSearch = []
-
-    if (supabase.auth.user() === null) {
-      router.push('/login')
-    }
-
+    
     const getSearchResults = async (e) => {
       setSearchQuery(e.target.value)
       setLoading(true)
@@ -98,6 +94,15 @@ const NewChat = () => {
         setRecentSearches([])
       }, 1800000)
      }
+
+     useEffect(() => {
+      if (supabase.auth.user() === null) {
+        router.push('/login')
+      } else if (user?.user_id === null) {
+        router.push('/login')
+      }
+    }, [router, user?.user_id])
+
     useEffect(() => {
           const search = JSON.parse(localStorage.getItem('recentSearches'))
           setRecentSearches(search)

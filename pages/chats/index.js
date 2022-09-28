@@ -18,9 +18,15 @@ const Messages = () => {
   const [recipient2, setRecipient2] = React.useState([])
 
 
-  if (supabase.auth.user() === null) {
-    router.push('/login')
-  }
+  useEffect(() => {
+    if (supabase.auth.user() === null) {
+      router.push('/login')
+    } else if (user?.user_id === null) {
+      router.push('/login')
+    }
+  }, [router, user?.user_id])
+
+
   useEffect(() => {
     setTimeout(() => {
       setVisible(true)
@@ -31,6 +37,7 @@ const Messages = () => {
       .from('chats')
       .select('*')
       .eq('sender_id', supabase.auth.user().id)
+      .order('last_message_time', { ascending: false })
       if (error) {
           console.log(error)
       }
@@ -45,6 +52,7 @@ const Messages = () => {
       .from('chats')
       .select('*')
       .eq('recipient_id', supabase.auth.user().id)
+      .order('last_message_time', { ascending: false })
       if (error) {
           console.log(error)
       }
