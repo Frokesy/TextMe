@@ -10,6 +10,7 @@ const ChatBox = ({ chatData }) => {
     const [message, setMessage] = React.useState('')
     const [messages, setMessages] = React.useState([])
     const [loading, setLoading] = React.useState(true)
+    const [change, setChange] = React.useState(null)
 
     const sendMessage = async (e) => {
         e.preventDefault()
@@ -26,40 +27,43 @@ const ChatBox = ({ chatData }) => {
                         sender_id: user?.user_id,
                     },
                 ])
+             
             if (error) {
                 return
             }
-            const { data: lastMessage, error: lastMessageError } = await supabase
-                .from('chats')
-                .update({ last_message: message })
-                .eq('chat_id', chatData[0]?.chat_id)
-            if (lastMessageError) {
-                return
-            }
+            // const { data: lastMessage, error: lastMessageError } = await supabase
+            //     .from('chats')
+            //     .update({ last_message: message })
+            //     .eq('chat_id', chatData[0]?.chat_id)
+            //     setLastMessage(lastMessage)
+            // if (lastMessageError) {
+            //     return
+            // }
             setMessage('')
         } catch (error) {
             return
         }
     }
+
+
+      
     useEffect(() => {
       const fetchMessages = async () => {
         const { data, error } = await supabase
             .from('messages')
             .select('*')
             .eq('chat_id', chatData[0]?.chat_id)
-        // if (error) {
-        //     console.log(error)
-        // }
         if (data) {
           setMessages(data)
           setLoading(false)
         }
     }
-    fetchMessages()
-    }, [message, chatData])
+      fetchMessages()
+    }, [chatData, messages])
+
 
   return (
-    <div>
+    <div className="max-h-[90vh] overflow-scroll">
       {loading ? (
         <div className=" h-screen w-screen opacity-75 absolute flex items-center justify-center">
           <Spinner color="#0fa84e" size="lg" thickness="3px" />
@@ -79,6 +83,7 @@ const ChatBox = ({ chatData }) => {
         ))}
       </div>
       )}
+      <div className="mt-14"></div>
       <div className="message-input">
         <div className="fixed bottom-2 w-full">
             <div className="flex items-center justify-between space-x-2 px-2">

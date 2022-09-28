@@ -160,6 +160,41 @@ const Profile = () => {
     }
   }
 
+
+  useEffect(() => {
+    const updateDataInChat = async () => {
+        const { data, error } = await supabase
+            .from('chats')
+            .select('*')
+        if (error) {
+            console.log(error)
+        }
+        
+  const findUser = data.map(async user => {
+    if (user.sender_id === supabase.auth.user().id) {
+        const { data, error } = await supabase
+            .from('chats')
+            .update({ sender_pic: profile?.profile_pic })
+            .eq('sender_id', supabase.auth.user().id)
+        if (error) {
+            console.log(error)
+        }   
+    }
+    if (user.recipient_id === supabase.auth.user().id) {
+        const { data, error } = await supabase
+            .from('chats')
+            .update({ recipient_pic: profile?.profile_pic })
+            .eq('recipient_id', supabase.auth.user().id)
+        if (error) {
+            console.log(error)
+        }
+    }
+    })
+    return findUser
+}
+    updateDataInChat()
+  }, [profile])
+
   useEffect(() => {
     setTimeout(() => {
         setLoading({
@@ -172,6 +207,7 @@ const Profile = () => {
   useEffect(() => {
     getUser()
   }, [])
+
 
 
   return (
