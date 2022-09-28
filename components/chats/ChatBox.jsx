@@ -31,14 +31,7 @@ const ChatBox = ({ chatData }) => {
             if (error) {
                 return
             }
-            // const { data: lastMessage, error: lastMessageError } = await supabase
-            //     .from('chats')
-            //     .update({ last_message: message })
-            //     .eq('chat_id', chatData[0]?.chat_id)
-            //     setLastMessage(lastMessage)
-            // if (lastMessageError) {
-            //     return
-            // }
+
             setMessage('')
         } catch (error) {
             return

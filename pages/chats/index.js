@@ -16,6 +16,11 @@ const Messages = () => {
   const [chats, setChats] = React.useState([])
   const [recipient1, setRecipient1] = React.useState([])
   const [recipient2, setRecipient2] = React.useState([])
+
+
+  if (supabase.auth.user() === null) {
+    router.push('/login')
+  }
   useEffect(() => {
     setTimeout(() => {
       setVisible(true)

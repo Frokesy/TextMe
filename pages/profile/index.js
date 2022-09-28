@@ -34,6 +34,10 @@ const Profile = () => {
     summary: '',
   })
 
+  if (supabase.auth.user() === null) {
+    router.push('/login')
+  }
+  
   const updatePic = (pics) => {
     if (pics === undefined) {
       setMessage({

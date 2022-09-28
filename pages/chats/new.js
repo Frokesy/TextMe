@@ -17,6 +17,10 @@ const NewChat = () => {
     const [loading, setLoading] = React.useState(false)
     let recentSearch = []
 
+    if (supabase.auth.user() === null) {
+      router.push('/login')
+    }
+
     const getSearchResults = async (e) => {
       setSearchQuery(e.target.value)
       setLoading(true)

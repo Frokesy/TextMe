@@ -13,6 +13,10 @@ const Inbox = () => {
   const { chatId } = router.query
   const { user } = React.useContext(UserContext)
   const [chats, setChats] = React.useState([])
+
+  if (supabase.auth.user() === null) {
+    router.push('/login')
+  }
   
   useEffect(() => {
     const fetchChat = async () => {
