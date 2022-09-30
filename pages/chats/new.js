@@ -11,7 +11,8 @@ import { useRouter } from 'next/router'
 
 const NewChat = () => {
     const router = useRouter()
-    const { user, recentSearches, setRecentSearches } = React.useContext(UserContext)
+    const { recentSearches, setRecentSearches } = React.useContext(UserContext)
+    const [user, setUser] = React.useState(null)
     const [searchResult, setSearchResult] = React.useState('')
     const [searchQuery, setSearchQuery] = React.useState('')
     const [loading, setLoading] = React.useState(false)
@@ -62,33 +63,34 @@ const NewChat = () => {
       const chatExists = chatData.find(chat => chat.sender_id === supabase.auth.user().id && chat.recipient_id === id) || chatData.find(chat => chat.sender_id === id && chat.recipient_id === supabase.auth.user().id)
       if (chatExists) {
         router.push(`/inbox/${chatExists.chat_id}`)
-      } else {        
-        const { data, error } = await supabase
-        .from('chats')
-        .insert([
-          {
-            chat_id: uuidv4(), 
-            sender_id: user?.user_id,
-            sender_name: user?.name,
-            sender_username: user?.username,
-            sender_pic: user?.profile_pic,
-            recipient_id: id,
-            recipient_name: name,
-            recipient_username: username,
-            recipient_pic: pic,
+      } else {
+        if (user) {
+          const { data, error } = await supabase
+          .from('chats')
+          .insert([
+            {
+              chat_id: uuidv4(), 
+              sender_id: user?.user_id,
+              sender_name: user?.name,
+              sender_username: user?.username,
+              sender_pic: user?.profile_pic,
+              recipient_id: id,
+              recipient_name: name,
+              recipient_username: username,
+              recipient_pic: pic,
+            }
+          ])
+          if (error) {
+            console.log(error)
           }
-        ])
-        if (error) {
-          console.log(error)
-        }
-        router.push(`/inbox/${data[0].chat_id}`)
+          router.push(`/inbox/${data[0].chat_id}`)
+        }     
       }
 
 
     }
 
     if (typeof window !== 'undefined') {
-      //setTimeout to clear recentSearches from local storage after 30 minutes
       setInterval(() => {
         localStorage.removeItem('recentSearches')
         setRecentSearches([])
@@ -106,7 +108,25 @@ const NewChat = () => {
     useEffect(() => {
           const search = JSON.parse(localStorage.getItem('recentSearches'))
           setRecentSearches(search)
-    }, [setRecentSearches])    
+    }, [setRecentSearches])
+
+    useEffect(() => {
+      const fetchUser = async () => {
+      try {
+          const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', supabase.auth.user().id)
+          if (error) {
+          setError(error)
+          } else {
+          setUser(data[0])
+          }
+      } catch (error) {
+          setError(error)
+      }}
+      fetchUser()
+  }, [])
   return (
     <div>
       <Meta title="New Chat" />
@@ -139,9 +159,13 @@ const NewChat = () => {
               <div className="mt-4 -mb-4 flex justify-start space-x-12 max-w-[90vw] overflow-scroll">
               {recentSearches?.map((search, index) => (
                 <div key={index} onClick={() => createChat(search?.id, search?.pic, search?.username, search?.name)} className="flex flex-col items-center space-y-1 text-center mt-2">
-                  <Avatar size="lg" name={search.username} src={search.pic} />
-                  <span className="text-neutral-400 text-[10px] lowercase">@{search.username}</span>
-                  </div>
+                  {search.id !== user?.user_id && (
+                      <div>
+                        <Avatar size="lg" name={search.username} src={search.pic} />
+                        <span className="text-neutral-400 text-[10px] lowercase">@{search.username}</span>
+                      </div>
+                  )}
+                </div>
               ))}
             </div>
             ) : (

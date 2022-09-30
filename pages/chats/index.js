@@ -11,7 +11,7 @@ import ChatList from '../../components/chats/ChatList'
 
 const Messages = () => {
   const router = useRouter()
-  const { user } = React.useContext(UserContext)
+  const [user, setUser] = React.useState(null)
   const [visible, setVisible] = React.useState(false)
   const [chats, setChats] = React.useState([])
   const [search, setSearch] = React.useState('')
@@ -74,8 +74,32 @@ const Messages = () => {
   }, [user?.user_id])
   useEffect(() => {
     const mergedChats = recipient1.concat(recipient2)
-    setChats(mergedChats)
+
+    //order mergedChats by last_message_time
+    const sortedChats = mergedChats.sort((a, b) => {
+      return new Date(b.last_message_time) - new Date(a.last_message_time)
+    })
+    setChats(sortedChats)
   }, [recipient1, recipient2])
+
+
+  useEffect(() => {
+    const fetchUser = async () => {
+    try {
+        const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', supabase.auth.user().id)
+        if (error) {
+        setError(error)
+        } else {
+        setUser(data[0])
+        }
+    } catch (error) {
+        setError(error)
+    }}
+    fetchUser()
+}, [])
   return (
     <AnimatePresence>
     <div className="">
