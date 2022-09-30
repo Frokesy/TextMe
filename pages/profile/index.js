@@ -214,7 +214,7 @@ const Profile = () => {
 
       
 
-      <div className="w-[90vw] bg-neutral-800 rounded-lg shadow-md py-4 px-4 flex flex-col mx-auto mt-6">
+      {/* <div className="w-[90vw] bg-neutral-800 rounded-lg shadow-md py-4 px-4 flex flex-col mx-auto mt-6">
         <div className="flex justify-between bg-transparent">
           <span className="text-neutral-400 text-[18px] font-semibold bg-transparent">Useful Links</span>
           <span className="text-[#0fa84e] text-[15px] font-semibold bg-transparent">Edit</span>
@@ -255,7 +255,7 @@ const Profile = () => {
         <div className="flex bg-transparent flex-row justify-end mt-4">
           <button className="bg-[#0fa84e] text-[#fff] px-4 py-2 rounded-lg text-[14px] font-semibold">Save</button>
         </div>
-      </div>
+      </div> */}
       <div onClick={handleLogout} className="flex justify-center cursor-pointer my-10 font-semibold text-red-700 space-x-1 items-center">
         <IoPower size={16} />
         <span className=" text-[14px]">Logout</span>

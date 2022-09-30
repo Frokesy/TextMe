@@ -14,9 +14,21 @@ const Messages = () => {
   const { user } = React.useContext(UserContext)
   const [visible, setVisible] = React.useState(false)
   const [chats, setChats] = React.useState([])
+  const [search, setSearch] = React.useState('')
   const [recipient1, setRecipient1] = React.useState([])
   const [recipient2, setRecipient2] = React.useState([])
 
+  const handleSearch = async (e) => {
+    setSearch(e.target.value)
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .ilike('name', `%${search}%`)
+    if (error) {
+      console.log(error)
+    }
+    setSearchResult(data)
+  }
 
   useEffect(() => {
     if (supabase.auth.user() === null) {
@@ -75,19 +87,24 @@ const Messages = () => {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
         >
-          <div className="w-[90vw] cursor-pointer items-center mx-auto pt-4 flex justify-center">
+          <div className="w-[95vw] cursor-pointer items-center mx-auto pt-4 flex justify-center">
             <Link href="/profile" passHref>
               <Avatar size="lg" mx="auto" name={user?.name} src={user?.profile_pic} />
             </Link>
           </div>
-          <div className="w-[90vw] mx-auto flex items-center text-center justify-between">
+          <div className="w-[95vw] mx-auto flex items-center text-center justify-between">
               <h1 className="text-neutral-400 text-[30px]">Messages</h1>
               <FaEdit className="text-[#0fa84e] cursor-pointer text-[22px]" onClick={() => router.push('/chats/new') } />
           </div>
-          <div className="w-[90vw] mx-auto mt-2 space-x-2 bg-neutral-800 items-center rounded-2xl p-3 offset-0 border-none text-[#ccc] flex text-[13px]">
+          {/* <div className="w-[95vw] mx-auto mt-2 space-x-2 bg-neutral-800 items-center rounded-2xl p-3 offset-0 border-none text-[#ccc] flex text-[13px]">
               <FaSearch className="bg-transparent"/>
-              <input type="text" placeholder="Search" className="w-full h-full hover:border-none focus:border-none bg-transparent offset-0 outline-none border-none"/>
-          </div>
+              <input type="text" placeholder="Search"
+               className="w-full h-full hover:border-none focus:border-none bg-transparent offset-0 outline-none border-none"
+               value={search}
+               onChange={handleSearch}
+               />
+          </div> */}
+      <div className="w-full border-b border-gray-600 mt-4" />
           {chats?.length === 0 ? (
                     <div className="h-[60vh] w-screen text-center flex items-center justify-center">
                     <h1 className="text-gray-500 text-[11px] font-light">No messages yet, start a conversation today!</h1>
