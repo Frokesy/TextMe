@@ -63,7 +63,7 @@ const Inbox = () => {
                         <IoArrowBack size={20} />
                       </div>
                       </div>
-                      <div className="flex items-center justify-center mt-14 py-4 max-w-[95%] overflow-scroll px-4 border-b border-gray-300">
+                      <div className="flex items-center justify-center mt-14 py-4 max-w-[95%] overflow-scroll px-4">
                         <div className="grid grid-cols-3 justify-center items-center gap-6 mb-8">
                           <div className="bg-[#0fa84e] w-12 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#0fa84e')}
