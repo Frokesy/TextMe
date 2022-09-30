@@ -117,7 +117,7 @@ const Inbox = () => {
                 <p className="text-[12px] text-gray-500 font-semibold">{user?.user_id === chat.recipient_id ? chat.sender_username : chat.recipient_username}</p>
               </div>
             </div>              
-              <div className={`flex items-center space-x-6 text-[${chat.color}] text-[20px]`}>
+              <div className={`flex items-center space-x-4 text-[${chat.color}] text-[20px]`}>
               <FaVideo />
               <div 
               className={`bg-[${chats[0]?.color}] w-6 aspect-square border-[2px] border-white rounded-[100%]`}
