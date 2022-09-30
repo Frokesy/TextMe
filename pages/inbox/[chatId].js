@@ -63,9 +63,9 @@ const Inbox = () => {
                         <IoArrowBack size={20} />
                       </div>
                       </div>
-                      <div className="flex items-center justify-between mx-auto mt-14 py-4 max-w-[95%] overflow-scroll px-4 border-b border-gray-300">
-                        <div className="grid grid-cols-5 items-center gap-6 mb-8">
-                          <div className="bg-[#0fa84e] w-12 aspect-square border-[2px] border-white rounded-[100%]"
+                      <div className="flex items-center justify-center mt-14 py-4 max-w-[95%] overflow-scroll px-4 border-b border-gray-300">
+                        <div className="grid grid-cols-3 justify-center items-center gap-6 mb-8">
+                          <div className="bg-[#0fa84e] w-15 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#0fa84e')}
                           ></div>
                           <div className="bg-[#ff0000] w-15 aspect-square border-[2px] border-white rounded-[100%]"
@@ -77,23 +77,12 @@ const Inbox = () => {
                           <div className="bg-[#0000ff] w-15 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#0000ff')}
                           ></div>
-                          <div className="bg-[#00ffff] w-15 aspect-square border-[2px] border-white rounded-[100%]"
-                          onClick={() => updateColor('#00ffff')}
-                          ></div>
-                          <div className="bg-[#00ff00] w-15 aspect-square border-[2px] border-white rounded-[100%]"
-                          onClick={() => updateColor('#00ff00')}
-                          ></div>
-                          <div className="bg-[#ffff00] w-15 aspect-square border-[2px] border-white rounded-[100%]"
-                          onClick={() => updateColor('#ffff00')}
-                          ></div>
+
                           <div className="bg-[#ff6600] w-15 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#ff6600')}
                           ></div>
                           <div className="bg-[#ff9900] w-15 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#ff9900')}
-                          ></div>
-                          <div className="bg-[#ffcc00] w-15 aspect-square border-[2px] border-white rounded-[100%]"
-                          onClick={() => updateColor('#ffcc00')}
                           ></div>
                         </div>
                           </div>
@@ -104,7 +93,7 @@ const Inbox = () => {
         {chats?.map((chat) => (
           <div key={chat.chat_id}
             className="flex items-center justify-between w-full py-4">
-          <div onClick={() => router.push('/chats')} className={`font-extrabold text-[${chat.color}]`}>
+          <div onClick={() => router.push('/chats')} className={`font-extrabold text-[${chat?.color}]`}>
               <IoArrowBack size={20} />
             </div>              
             <div>
@@ -117,7 +106,7 @@ const Inbox = () => {
                 <p className="text-[12px] text-gray-500 font-semibold">{user?.user_id === chat.recipient_id ? chat.sender_username : chat.recipient_username}</p>
               </div>
             </div>              
-              <div className={`flex items-center space-x-4 text-[${chat.color}] text-[20px]`}>
+              <div className={`flex items-center space-x-4 text-[${chat?.color}] text-[20px]`}>
               <FaVideo />
               <div 
               className={`bg-[${chats[0]?.color}] w-6 aspect-square border-[2px] border-white rounded-[100%]`}
