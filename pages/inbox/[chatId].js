@@ -5,6 +5,7 @@ import { FaPhone, FaVideo } from 'react-icons/fa'
 import { IoArrowBack } from 'react-icons/io5'
 import ChatBox from '../../components/chats/ChatBox'
 import { UserContext } from '../../context/UserContext'
+import Meta from '../../defaults/Meta'
 import { supabase } from '../../utils/supabaseClient'
 
 
@@ -36,6 +37,7 @@ const Inbox = () => {
   }, [chatId])
   return (
     <div>
+      <Meta title="Inbox" />
       <div className="flex justify-between w-full border-b border-gray-500 px-8">
         {chats?.map((chat) => (
           <div key={chat.chat_id}

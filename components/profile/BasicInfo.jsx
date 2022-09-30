@@ -104,8 +104,7 @@ const BasicInfo = ({ profile, setProfile }) => {
               </div>
               <div className="flex bg-transparent flex-row justify-end mt-4">
                 <button 
-                  className="bg-[#0fa84e] text-[#fff] px-4 py-2 rounded-lg text-[12px] font-semibold">
-                    
+                  className="bg-[#0fa84e] text-[#fff] px-4 py-2 rounded-lg text-[12px] font-semibold">        
                       Save
                 </button>
               </div>

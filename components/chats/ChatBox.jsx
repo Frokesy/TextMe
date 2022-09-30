@@ -10,10 +10,11 @@ const ChatBox = ({ chatData }) => {
     const [message, setMessage] = React.useState('')
     const [messages, setMessages] = React.useState([])
     const [loading, setLoading] = React.useState(true)
-    const [change, setChange] = React.useState(null)
+    const [loader, setLoader] = React.useState(false)
 
     const sendMessage = async (e) => {
         e.preventDefault()
+        setLoader(true)
         if (!message) {
             return
         }
@@ -31,14 +32,15 @@ const ChatBox = ({ chatData }) => {
             if (error) {
                 return
             }
+            setLoader(false)
+            setMessage('')
             const { data: lastMessage, error: lastMessageError } = await supabase
                 .from('chats')
-                .update({ last_message: message, last_message_time: new Date() })
+                .update({ last_message: data[0]?.message, last_message_time: new Date() })
                 .eq('chat_id', chatData[0]?.chat_id)
             if (lastMessageError) {
                 return
             }
-            setMessage('')
         } catch (error) {
             return
         }
@@ -98,9 +100,17 @@ const ChatBox = ({ chatData }) => {
                     onChange={(e) => setMessage(e.target.value)}
                     />
                     {message.length > 0 && (
-                        <div onClick={sendMessage} className="text-[25px] h-full rounded-full">
-                            <IoArrowUpCircle color="#0fa84e" />
+                      <div>
+                        {loader ? (
+                        <div className="h-6 w-6">
+                          <Spinner color="#0fa84e" size="sm" thickness="3px" />
                         </div>
+                        ) : (
+                        <div onClick={sendMessage} className="text-[25px] h-full rounded-full">
+                          <IoArrowUpCircle color="#0fa84e" />
+                        </div>
+                        )}
+                      </div>
                     )}
                 </div>
             </div>
