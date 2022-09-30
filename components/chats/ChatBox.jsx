@@ -5,7 +5,7 @@ import { IoArrowUp, IoArrowUpCircle } from 'react-icons/io5'
 import { UserContext } from '../../context/UserContext'
 import { supabase } from '../../utils/supabaseClient'
 
-const ChatBox = ({ chatData }) => {
+const ChatBox = ({ chatData, color }) => {
     const { user } = React.useContext(UserContext)
     const [message, setMessage] = React.useState('')
     const [messages, setMessages] = React.useState([])
@@ -60,8 +60,8 @@ const ChatBox = ({ chatData }) => {
         }
     }
       fetchMessages()
-    }, [chatData, messages])
 
+    }, [chatData, messages])
 
   return (
     <div className="max-h-[90vh] overflow-scroll">
@@ -78,7 +78,7 @@ const ChatBox = ({ chatData }) => {
           >
             <span 
               className={`message ${
-                message.sender_id === user?.user_id ? 'flex justify-end mt-1 max-w-[60vw] mx-4 rounded-3xl text-gray-200 font-light text-[12px] bg-[#0fa84e] px-4 py-2' : 'justify-start mt-1 max-w-[60vw] mx-4 rounded-3xl text-gray-200 font-light text-[12px] bg-gray-500 px-4 py-2'}`}
+                message.sender_id === user?.user_id ? `flex justify-end mt-1 max-w-[60vw] mx-4 rounded-3xl text-gray-200 font-light text-[12px] bg-[${chatData[0].color}] px-4 py-2` : 'justify-start mt-1 max-w-[60vw] mx-4 rounded-3xl text-gray-200 font-light text-[12px] bg-gray-500 px-4 py-2'}`}
             >{message.message}</span>
           </div>
         ))}
