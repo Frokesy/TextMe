@@ -65,23 +65,23 @@ const Inbox = () => {
                       </div>
                       <div className="flex items-center justify-center mt-14 py-4 max-w-[95%] overflow-scroll px-4 border-b border-gray-300">
                         <div className="grid grid-cols-3 justify-center items-center gap-6 mb-8">
-                          <div className="bg-[#0fa84e] w-15 aspect-square border-[2px] border-white rounded-[100%]"
+                          <div className="bg-[#0fa84e] w-12 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#0fa84e')}
                           ></div>
-                          <div className="bg-[#ff0000] w-15 aspect-square border-[2px] border-white rounded-[100%]"
+                          <div className="bg-[#ff0000] w-12 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#ff0000')}
                           ></div>
-                          <div className="bg-[#ff00ff] w-15 aspect-square border-[2px] border-white rounded-[100%]"
+                          <div className="bg-[#ff00ff] w-12 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#ff00ff')}
                           ></div>
-                          <div className="bg-[#0000ff] w-15 aspect-square border-[2px] border-white rounded-[100%]"
+                          <div className="bg-[#0000ff] w-12 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#0000ff')}
                           ></div>
 
-                          <div className="bg-[#ff6600] w-15 aspect-square border-[2px] border-white rounded-[100%]"
+                          <div className="bg-[#ff6600] w-12 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#ff6600')}
                           ></div>
-                          <div className="bg-[#ff9900] w-15 aspect-square border-[2px] border-white rounded-[100%]"
+                          <div className="bg-[#ff9900] w-12 aspect-square border-[2px] border-white rounded-[100%]"
                           onClick={() => updateColor('#ff9900')}
                           ></div>
                         </div>
