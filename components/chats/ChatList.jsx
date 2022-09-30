@@ -22,14 +22,16 @@ const ChatList = ({chats}) => {
     }, [chats.last_message_time])
   return (
     <div className="w-[98vw] mx-auto mt-4 space-x-2 px-3 text-[#ccc] flex flex-col text-[13px]">
-      <div className="flex justify-between items-center space-x-1">
+      <div 
+        onClick={() => router.push(`/inbox/${chats.chat_id}`)}
+        className="flex justify-between cursor-pointer items-center space-x-1">
       <div className="flex items-center space-x-3">
         <div className="">
         <Avatar size="md" 
         name={user?.user_id === chats.recipient_id ? chats.sender_name : chats.recipient_name} 
         src={user?.user_id === chats.recipient_id ? chats.sender_pic : chats.recipient_pic} />
         </div>
-        <div onClick={() => router.push(`/inbox/${chats.chat_id}`)} className="flex flex-col">
+        <div className="flex flex-col">
             <span className="text-gray-100 text-[13px] font-semibold">
               {user?.user_id === chats.recipient_id ? chats.sender_name : chats.recipient_name }
             </span>

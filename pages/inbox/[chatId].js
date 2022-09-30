@@ -34,7 +34,6 @@ const Inbox = () => {
   }
     fetchChat()
   }, [chatId])
-  console.log(user?.user_id)
   return (
     <div>
       <div className="flex justify-between w-full border-b border-gray-500 px-8">
@@ -45,7 +44,9 @@ const Inbox = () => {
               <IoArrowBack size={20} />
             </div>              
             <div>
-            <div className="items-center text-center">
+            <div className="items-center cursor-pointer text-center"
+            onClick={() => router.push(`/profile/${user?.user_id === chat.sender_id ? chat.recipient_id : chat.sender_id}`)}
+            >
                 <Avatar size="md"
                  name={user?.user_id === chat.recipient_id ? chat.sender_name : chat.recipient_name} 
                  src={user?.user_id === chat.recipient_id ? chat.sender_pic : chat.recipient_pic} />
