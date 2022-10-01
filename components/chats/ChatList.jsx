@@ -49,7 +49,7 @@ const ChatList = ({chats}) => {
         <div className="">
         <Avatar size="md" 
         name={user?.user_id === chats.sender_id ? chats.recipient_name : chats.sender_name} 
-        src={user?.user_id === chats.sender_id ? chats.recipient_name : chats.sender_name} />
+        src={user?.user_id === chats.sender_id ? chats.recipient_pic : chats.sender_pic} />
         </div>
         <div className="flex flex-col">
             <span className="text-gray-100 text-[13px] font-semibold">
