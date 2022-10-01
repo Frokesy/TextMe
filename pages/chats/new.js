@@ -160,7 +160,7 @@ const NewChat = () => {
               {recentSearches?.map((search, index) => (
                 <div key={index} onClick={() => createChat(search?.id, search?.pic, search?.username, search?.name)} className="flex flex-col items-center space-y-1 text-center mt-2">
                   {search.id !== user?.user_id && (
-                      <div>
+                      <div className="max-w-[90vw] mx-auto flex flex-col items-center space-y-2">
                         <Avatar size="lg" name={search.username} src={search.pic} />
                         <span className="text-neutral-400 text-[10px] lowercase">@{search.username}</span>
                       </div>
