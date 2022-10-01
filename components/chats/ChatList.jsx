@@ -2,10 +2,12 @@ import { Avatar } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { UserContext } from '../../context/UserContext'
+import { supabase } from '../../utils/supabaseClient'
 
 const ChatList = ({chats}) => {
     const router = useRouter()
-    const { user } = React.useContext(UserContext)
+    const [user, setUser] = React.useState(null)
+    const [error, setError] = React.useState(null)
     const [messageTime, setMessageTime] = React.useState('')
 
     //extract time from chats.last_message_time in 24-hour format
@@ -20,6 +22,24 @@ const ChatList = ({chats}) => {
     useEffect(() => {
       extractTime(chats.last_message_time)
     }, [chats.last_message_time])
+
+    useEffect(() => {
+      const fetchUser = async () => {
+      try {
+          const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', supabase.auth.user().id)
+          if (error) {
+          setError(error)
+          } else {
+          setUser(data[0])
+          }
+      } catch (error) {
+          setError(error)
+      }}
+      fetchUser()
+  }, [])
   return (
     <div className="w-[98vw] mx-auto mt-4 space-x-2 px-3 text-[#ccc] flex flex-col text-[13px]">
       <div 

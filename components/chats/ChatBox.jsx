@@ -6,11 +6,12 @@ import { UserContext } from '../../context/UserContext'
 import { supabase } from '../../utils/supabaseClient'
 
 const ChatBox = ({ chatData, color }) => {
-    const { user } = React.useContext(UserContext)
     const [message, setMessage] = React.useState('')
     const [messages, setMessages] = React.useState([])
     const [loading, setLoading] = React.useState(true)
     const [loader, setLoader] = React.useState(false)
+    const [user, setUser] = React.useState(null)
+    const [error, setError] = React.useState(null)
 
     const sendMessage = async (e) => {
         e.preventDefault()
@@ -46,6 +47,23 @@ const ChatBox = ({ chatData, color }) => {
         }
     }
 
+    useEffect(() => {
+      const fetchUser = async () => {
+      try {
+          const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', supabase.auth.user().id)
+          if (error) {
+          setError(error)
+          } else {
+          setUser(data[0])
+          }
+      } catch (error) {
+          setError(error)
+      }}
+      fetchUser()
+    }, [])
 
       
     useEffect(() => {
