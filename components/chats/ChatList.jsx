@@ -48,12 +48,12 @@ const ChatList = ({chats}) => {
       <div className="flex items-center space-x-3">
         <div className="">
         <Avatar size="md" 
-        name={user?.user_id === chats.recipient_id ? chats.sender_name : chats.recipient_name} 
-        src={user?.user_id === chats.recipient_id ? chats.sender_pic : chats.recipient_pic} />
+        name={user?.user_id === chats.sender_id ? chats.recipient_name : chats.sender_name} 
+        src={user?.user_id === chats.sender_id ? chats.recipient_name : chats.sender_name} />
         </div>
         <div className="flex flex-col">
             <span className="text-gray-100 text-[13px] font-semibold">
-              {user?.user_id === chats.recipient_id ? chats.sender_name : chats.recipient_name }
+              {user?.user_id === chats.sender_id ? chats.recipient_name : chats.sender_name }
             </span>
             <span className="text-gray-400 mb-4 text-[12px] font-light">{chats.last_message}</span>
         </div>
